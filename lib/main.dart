@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:crud_activity/student.dart';
 
 void main() {
-  runApp(
-    MaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      home: Student(),
-    ),
-  );
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Student App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Student(), // Use the Student screen
+    );
+  }
 }
