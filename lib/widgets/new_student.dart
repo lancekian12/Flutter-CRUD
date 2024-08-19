@@ -72,10 +72,10 @@ class _NewStudentState extends State<NewStudent> {
     try {
       await createStudent(newStudent);
       widget.onAddStudent(newStudent);
-      Navigator.of(context).pop(); // Close the modal after adding the student
+      Navigator.of(context).pop();
     } catch (e) {
       print('Error adding student: $e');
-      _showDialog(); // Show an error dialog if there's an issue
+      _showDialog();
     }
   }
 
@@ -83,7 +83,7 @@ class _NewStudentState extends State<NewStudent> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-      height: MediaQuery.of(context).size.height, // Full screen height
+      height: MediaQuery.of(context).size.height,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(

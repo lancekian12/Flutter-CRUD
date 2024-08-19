@@ -40,6 +40,25 @@ class _UpdateStudentState extends State<UpdateStudent> {
     super.dispose();
   }
 
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Invalid input'),
+        content: const Text(
+            'Please make sure a valid Student Name, Age, Section, and Tuition Fee were entered'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+            },
+            child: const Text('Okay'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _submitUpdateButton() async {
     final _ageAmount = int.tryParse(_ageController.text);
     final _tuitionAmount = int.tryParse(_tuitionFeeController.text);
@@ -51,7 +70,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
     if (_studentNameController.text.trim().isEmpty ||
         _sectionController.text.trim().isEmpty ||
         enteredIsInvalid) {
-      // Show error dialog or message
+      _showDialog();
       return;
     }
 
@@ -63,13 +82,11 @@ class _UpdateStudentState extends State<UpdateStudent> {
     );
 
     try {
-      await updateStudent(widget.studentData['_id'],
-          updatedStudent); // Call updateStudent instead of updateData
+      await updateStudent(widget.studentData['_id'], updatedStudent);
       widget.onUpdateStudent(updatedStudent);
-      Navigator.of(context).pop(); // Close the modal after updating
+      Navigator.of(context).pop();
     } catch (e) {
       print('Error updating student: $e');
-      // Show error dialog or message
     }
   }
 
@@ -77,7 +94,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-      height: MediaQuery.of(context).size.height, // Full screen height
+      height: MediaQuery.of(context).size.height,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(

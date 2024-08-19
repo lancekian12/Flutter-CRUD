@@ -19,13 +19,12 @@ Future<void> createStudent(StudentModel student) async {
       }),
     );
 
-    print('Create response status: ${response.statusCode}'); // Debugging line
-
+    print('Create response status: ${response.statusCode}');
     if (response.statusCode != 201) {
       throw Exception('Failed to create student');
     }
   } catch (e) {
-    print('Error: $e'); // Detailed logging
+    print('Error: $e');
     throw Exception('Error: $e');
   }
 }
@@ -68,7 +67,7 @@ Future<List<Map<String, dynamic>>> fetchData() async {
 // Update student data
 Future<void> updateStudent(String studentId, StudentModel updatedData) async {
   final url = Uri.parse('http://10.0.2.2:3000/api/v1/student/$studentId');
-  print('Updating student at: $url'); // Debugging line
+  print('Updating student at: $url');
 
   try {
     final response = await http.patch(
@@ -82,13 +81,13 @@ Future<void> updateStudent(String studentId, StudentModel updatedData) async {
       }),
     );
 
-    print('Update response status: ${response.statusCode}'); // Debugging line
+    print('Update response status: ${response.statusCode}');
 
     if (response.statusCode != 200) {
       throw Exception('Failed to update student');
     }
   } catch (e) {
-    print('Error: $e'); // Detailed logging
+    print('Error: $e');
     throw Exception('Error: $e');
   }
 }
