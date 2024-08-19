@@ -50,6 +50,11 @@ class _NewStudentState extends State<NewStudent> {
         _ageAmount <= 0 ||
         _tuitionAmount == null ||
         _tuitionAmount <= 0;
+    if (_studentNameController.text.trim().isEmpty ||
+        _sectionController.text.trim().isEmpty ||
+        enteredIsInvalid) {
+      _showDialog();
+    }
   }
 
   @override
@@ -93,7 +98,7 @@ class _NewStudentState extends State<NewStudent> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _submitStudentButton,
                   child: const Text(
                     "Add Student",
                     style: TextStyle(fontSize: 16),
