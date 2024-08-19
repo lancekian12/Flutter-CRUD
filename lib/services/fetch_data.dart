@@ -65,21 +65,27 @@ Future<List<Map<String, dynamic>>> fetchData() async {
 }
 
 // Update student data
-Future<void> updateData(Map<String, dynamic> updatedData) async {
-  final url = Uri.parse('http://10.0.2.2:3000/api/v1/student');
-  print('Updating data at: $url'); // Debugging line
+// Update student data
+Future<void> updateStudent(String studentId, StudentModel updatedData) async {
+  final url = Uri.parse('http://10.0.2.2:3000/api/v1/student/$studentId');
+  print('Updating student at: $url'); // Debugging line
 
   try {
-    final response = await http.put(
+    final response = await http.patch(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(updatedData),
+      body: jsonEncode({
+        'studentName': updatedData.studentName,
+        'age': updatedData.age,
+        'section': updatedData.section,
+        'tuitionFee': updatedData.tuitionFee,
+      }),
     );
 
     print('Update response status: ${response.statusCode}'); // Debugging line
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to update data');
+      throw Exception('Failed to update student');
     }
   } catch (e) {
     print('Error: $e'); // Detailed logging
@@ -87,7 +93,6 @@ Future<void> updateData(Map<String, dynamic> updatedData) async {
   }
 }
 
-// Delete student data
 // Delete student data
 Future<void> deleteData(String studentId) async {
   if (studentId.isEmpty) {

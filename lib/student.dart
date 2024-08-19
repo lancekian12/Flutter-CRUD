@@ -1,8 +1,8 @@
-// lib/screens/student_screen.dart
-
 import 'package:flutter/material.dart';
-import '../services/fetch_data.dart'; // Import the service file
+import '../services/fetch_data.dart';
 import 'package:crud_activity/widgets/new_student.dart';
+import 'package:crud_activity/widgets/update_student.dart';
+import 'package:crud_activity/model/student_model.dart';
 
 class Student extends StatefulWidget {
   Student({super.key});
@@ -21,7 +21,15 @@ class _StudentState extends State<Student> {
 
   Future<void> _updateStudent(Map<String, dynamic> updatedData) async {
     try {
-      await updateData(updatedData);
+      final studentId = updatedData['_id'];
+      final updatedStudent = StudentModel(
+        studentName: updatedData['studentName'],
+        age: updatedData['age'],
+        section: updatedData['section'],
+        tuitionFee: updatedData['tuitionFee'],
+      );
+
+      await updateStudent(studentId, updatedStudent);
       setState(() {
         studentFuture = fetchData();
       });
@@ -32,9 +40,9 @@ class _StudentState extends State<Student> {
 
   Future<void> _deleteStudent(String studentId) async {
     try {
-      await deleteData(studentId); // Pass the studentId to deleteData
+      await deleteData(studentId);
       setState(() {
-        studentFuture = fetchData(); // Refresh the list after deletion
+        studentFuture = fetchData();
       });
     } catch (e) {
       print('Error deleting data: $e');
@@ -47,6 +55,21 @@ class _StudentState extends State<Student> {
       isScrollControlled: true,
       builder: (ctx) => NewStudent(
         onAddStudent: (newStudent) {
+          setState(() {
+            studentFuture = fetchData();
+          });
+        },
+      ),
+    );
+  }
+
+  void _openUpdateStudentOverlay(Map<String, dynamic> studentData) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) => UpdateStudent(
+        studentData: studentData,
+        onUpdateStudent: (updatedStudent) {
           setState(() {
             studentFuture = fetchData();
           });
@@ -71,11 +94,11 @@ class _StudentState extends State<Student> {
         future: studentFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No data available'));
+            return const Center(child: Text('No data available'));
           } else {
             final studentList = snapshot.data!;
             return ListView.builder(
@@ -90,18 +113,13 @@ class _StudentState extends State<Student> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () {
-                          _updateStudent({
-                            'studentName': student['studentName'],
-                            'age': student['age'],
-                            'section': student['section'],
-                            'tuitionFee': student['tuitionFee'],
-                          });
+                          _openUpdateStudentOverlay(student);
                         },
                       ),
                       IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
+                        icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           final studentId = student['_id'];
                           if (studentId != null) {
