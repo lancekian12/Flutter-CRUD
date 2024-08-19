@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import '../services/fetch_data.dart'; // Import the service file
+import 'package:crud_activity/widgets/new_student.dart';
 
 class Student extends StatefulWidget {
   Student({super.key});
@@ -40,12 +41,24 @@ class _StudentState extends State<Student> {
     }
   }
 
+  void _openAddStudentOverlay() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => const NewStudent(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('CRUD Student'),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))],
+        actions: [
+          IconButton(
+            onPressed: _openAddStudentOverlay,
+            icon: const Icon(Icons.add),
+          )
+        ],
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: studentFuture,
