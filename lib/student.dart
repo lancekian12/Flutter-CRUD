@@ -22,7 +22,7 @@ class _StudentState extends State<Student> {
     try {
       await updateData(updatedData);
       setState(() {
-        studentFuture = fetchData(); // Refresh data
+        studentFuture = fetchData();
       });
     } catch (e) {
       print('Error updating data: $e');
@@ -31,9 +31,9 @@ class _StudentState extends State<Student> {
 
   Future<void> _deleteStudent(String studentId) async {
     try {
-      await deleteData(); // Modify this to use specific studentId if needed
+      await deleteData();
       setState(() {
-        studentFuture = fetchData(); // Refresh data
+        studentFuture = fetchData();
       });
     } catch (e) {
       print('Error deleting data: $e');
@@ -43,7 +43,10 @@ class _StudentState extends State<Student> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Student Details')),
+      appBar: AppBar(
+        title: const Text('CRUD Student'),
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))],
+      ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: studentFuture,
         builder: (context, snapshot) {
