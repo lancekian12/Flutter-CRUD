@@ -68,7 +68,9 @@ class _UpdateStudentState extends State<UpdateStudent> {
         _tuitionAmount <= 0;
 
     if (_studentNameController.text.trim().isEmpty ||
+        _studentNameController.text.length < 8 ||
         _sectionController.text.trim().isEmpty ||
+        _sectionController.text.length < 8 ||
         enteredIsInvalid) {
       _showDialog();
       return;

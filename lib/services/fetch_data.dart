@@ -4,7 +4,7 @@ import 'package:crud_activity/model/student_model.dart';
 
 // Create new student data
 Future<void> createStudent(StudentModel student) async {
-  final url = Uri.parse('http://10.0.2.2:3000/api/v1/student');
+  final url = Uri.parse('https://node-js-crud-5tc5.vercel.app/api/v1/student');
   print('Creating student at: $url'); // Debugging line
 
   try {
@@ -31,7 +31,7 @@ Future<void> createStudent(StudentModel student) async {
 
 // Fetch student data
 Future<List<Map<String, dynamic>>> fetchData() async {
-  final url = Uri.parse('http://10.0.2.2:3000/api/v1/student');
+  final url = Uri.parse('https://node-js-crud-5tc5.vercel.app/api/v1/student');
   print('Fetching data from: $url');
 
   try {
@@ -64,9 +64,9 @@ Future<List<Map<String, dynamic>>> fetchData() async {
 }
 
 // Update student data
-// Update student data
 Future<void> updateStudent(String studentId, StudentModel updatedData) async {
-  final url = Uri.parse('http://10.0.2.2:3000/api/v1/student/$studentId');
+  final url = Uri.parse(
+      'https://node-js-crud-5tc5.vercel.app/api/v1/student/$studentId');
   print('Updating student at: $url');
 
   try {
@@ -98,19 +98,20 @@ Future<void> deleteData(String studentId) async {
     throw Exception('Student ID cannot be empty');
   }
 
-  final url = Uri.parse('http://10.0.2.2:3000/api/v1/student/$studentId');
-  print('Deleting data from: $url'); // Debugging line
+  final url = Uri.parse(
+      'https://node-js-crud-5tc5.vercel.app/api/v1/student/$studentId');
+  print('Deleting data from: $url');
 
   try {
     final response = await http.delete(url);
 
-    print('Delete response status: ${response.statusCode}'); // Debugging line
+    print('Delete response status: ${response.statusCode}');
 
     if (response.statusCode != 204) {
       throw Exception('Failed to delete data');
     }
   } catch (e) {
-    print('Error: $e'); // Detailed logging
+    print('Error: $e');
     throw Exception('Error: $e');
   }
 }
