@@ -48,6 +48,7 @@ Future<List<Map<String, dynamic>>> fetchData() async {
 
       return studentList.map((student) {
         return {
+          '_id': student['_id'], // Ensure '_id' is included
           'studentName': student['studentName'] ?? 'Unknown',
           'age': student['age'] ?? 0,
           'section': student['section'] ?? 'Unknown',
@@ -87,7 +88,12 @@ Future<void> updateData(Map<String, dynamic> updatedData) async {
 }
 
 // Delete student data
+// Delete student data
 Future<void> deleteData(String studentId) async {
+  if (studentId.isEmpty) {
+    throw Exception('Student ID cannot be empty');
+  }
+
   final url = Uri.parse('http://10.0.2.2:3000/api/v1/student/$studentId');
   print('Deleting data from: $url'); // Debugging line
 
@@ -97,7 +103,6 @@ Future<void> deleteData(String studentId) async {
     print('Delete response status: ${response.statusCode}'); // Debugging line
 
     if (response.statusCode != 204) {
-      // 204 No Content
       throw Exception('Failed to delete data');
     }
   } catch (e) {

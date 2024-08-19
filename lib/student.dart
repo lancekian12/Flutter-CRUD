@@ -103,7 +103,12 @@ class _StudentState extends State<Student> {
                       IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          _deleteStudent(student['studentId']);
+                          final studentId = student['_id'];
+                          if (studentId != null) {
+                            _deleteStudent(studentId);
+                          } else {
+                            print('Student ID is null');
+                          }
                         },
                       ),
                     ],
