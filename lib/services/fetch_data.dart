@@ -1,7 +1,34 @@
-// services/fetch_data.dart
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:crud_activity/model/student_model.dart';
+
+// Create new student data
+Future<void> createStudent(StudentModel student) async {
+  final url = Uri.parse('http://10.0.2.2:3000/api/v1/student');
+  print('Creating student at: $url'); // Debugging line
+
+  try {
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'studentName': student.studentName,
+        'age': student.age,
+        'section': student.section,
+        'tuitionFee': student.tuitionFee,
+      }),
+    );
+
+    print('Create response status: ${response.statusCode}'); // Debugging line
+
+    if (response.statusCode != 201) {
+      throw Exception('Failed to create student');
+    }
+  } catch (e) {
+    print('Error: $e'); // Detailed logging
+    throw Exception('Error: $e');
+  }
+}
 
 // Fetch student data
 Future<List<Map<String, dynamic>>> fetchData() async {

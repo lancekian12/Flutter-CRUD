@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:crud_activity/model/student_model.dart';
+import 'package:crud_activity/services/fetch_data.dart';
 
 class NewStudent extends StatefulWidget {
-  const NewStudent({super.key});
+  const NewStudent({required this.onAddStudent, super.key});
+  final Function(StudentModel) onAddStudent;
   @override
   State<NewStudent> createState() {
     return _NewStudentState();
@@ -43,17 +46,35 @@ class _NewStudentState extends State<NewStudent> {
     );
   }
 
-  void _submitStudentButton() {
-    final _ageAmount = double.tryParse(_ageController.text);
-    final _tuitionAmount = double.tryParse(_tuitionFeeController.text);
+  void _submitStudentButton() async {
+    final _ageAmount = int.tryParse(_ageController.text);
+    final _tuitionAmount = int.tryParse(_tuitionFeeController.text);
     final enteredIsInvalid = _ageAmount == null ||
         _ageAmount <= 0 ||
         _tuitionAmount == null ||
         _tuitionAmount <= 0;
+
     if (_studentNameController.text.trim().isEmpty ||
         _sectionController.text.trim().isEmpty ||
         enteredIsInvalid) {
       _showDialog();
+      return;
+    }
+
+    final newStudent = StudentModel(
+      studentName: _studentNameController.text.trim(),
+      age: _ageAmount,
+      section: _sectionController.text.trim(),
+      tuitionFee: _tuitionAmount,
+    );
+
+    try {
+      await createStudent(newStudent);
+      widget.onAddStudent(newStudent);
+      Navigator.of(context).pop(); // Close the modal after adding student
+    } catch (e) {
+      print('Error adding student: $e');
+      _showDialog(); // Show an error dialog if there's an issue
     }
   }
 
