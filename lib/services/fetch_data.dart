@@ -87,8 +87,8 @@ Future<void> updateData(Map<String, dynamic> updatedData) async {
 }
 
 // Delete student data
-Future<void> deleteData() async {
-  final url = Uri.parse('http://10.0.2.2:3000/api/v1/student');
+Future<void> deleteData(String studentId) async {
+  final url = Uri.parse('http://10.0.2.2:3000/api/v1/student/$studentId');
   print('Deleting data from: $url'); // Debugging line
 
   try {
@@ -97,6 +97,7 @@ Future<void> deleteData() async {
     print('Delete response status: ${response.statusCode}'); // Debugging line
 
     if (response.statusCode != 204) {
+      // 204 No Content
       throw Exception('Failed to delete data');
     }
   } catch (e) {

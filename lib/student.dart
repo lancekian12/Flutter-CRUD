@@ -32,9 +32,9 @@ class _StudentState extends State<Student> {
 
   Future<void> _deleteStudent(String studentId) async {
     try {
-      await deleteData();
+      await deleteData(studentId); // Pass the studentId to deleteData
       setState(() {
-        studentFuture = fetchData();
+        studentFuture = fetchData(); // Refresh the list after deletion
       });
     } catch (e) {
       print('Error deleting data: $e');
@@ -44,7 +44,14 @@ class _StudentState extends State<Student> {
   void _openAddStudentOverlay() {
     showModalBottomSheet(
       context: context,
-      builder: (ctx) => const NewStudent(),
+      isScrollControlled: true,
+      builder: (ctx) => NewStudent(
+        onAddStudent: (newStudent) {
+          setState(() {
+            studentFuture = fetchData();
+          });
+        },
+      ),
     );
   }
 
@@ -96,7 +103,7 @@ class _StudentState extends State<Student> {
                       IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          _deleteStudent(student['studentName']);
+                          _deleteStudent(student['studentId']);
                         },
                       ),
                     ],

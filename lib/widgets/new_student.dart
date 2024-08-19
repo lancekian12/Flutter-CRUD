@@ -5,6 +5,7 @@ import 'package:crud_activity/services/fetch_data.dart';
 class NewStudent extends StatefulWidget {
   const NewStudent({required this.onAddStudent, super.key});
   final Function(StudentModel) onAddStudent;
+
   @override
   State<NewStudent> createState() {
     return _NewStudentState();
@@ -33,7 +34,7 @@ class _NewStudentState extends State<NewStudent> {
       builder: (ctx) => AlertDialog(
         title: const Text('Invalid input'),
         content: const Text(
-            'Please make sure a valid Student Name, Age, Section and Tuition Fee was entered'),
+            'Please make sure a valid Student Name, Age, Section, and Tuition Fee were entered'),
         actions: [
           TextButton(
             onPressed: () {
@@ -63,15 +64,15 @@ class _NewStudentState extends State<NewStudent> {
 
     final newStudent = StudentModel(
       studentName: _studentNameController.text.trim(),
-      age: _ageAmount,
+      age: _ageAmount!,
       section: _sectionController.text.trim(),
-      tuitionFee: _tuitionAmount,
+      tuitionFee: _tuitionAmount!,
     );
 
     try {
       await createStudent(newStudent);
       widget.onAddStudent(newStudent);
-      Navigator.of(context).pop(); // Close the modal after adding student
+      Navigator.of(context).pop(); // Close the modal after adding the student
     } catch (e) {
       print('Error adding student: $e');
       _showDialog(); // Show an error dialog if there's an issue
@@ -80,54 +81,58 @@ class _NewStudentState extends State<NewStudent> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextField(
-              controller: _studentNameController,
-              maxLength: 50,
-              decoration: const InputDecoration(
-                label: Text("Student Name:"),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+      height: MediaQuery.of(context).size.height, // Full screen height
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: _studentNameController,
+                maxLength: 50,
+                decoration: const InputDecoration(
+                  label: Text("Student Name:"),
+                ),
               ),
-            ),
-            TextField(
-              controller: _ageController,
-              maxLength: 50,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                label: Text("Student Age:"),
+              TextField(
+                controller: _ageController,
+                maxLength: 50,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  label: Text("Student Age:"),
+                ),
               ),
-            ),
-            TextField(
-              controller: _sectionController,
-              maxLength: 50,
-              decoration: const InputDecoration(
-                label: Text("Student Section:"),
+              TextField(
+                controller: _sectionController,
+                maxLength: 50,
+                decoration: const InputDecoration(
+                  label: Text("Student Section:"),
+                ),
               ),
-            ),
-            TextField(
-              controller: _tuitionFeeController,
-              maxLength: 50,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                label: Text("Student Tuition Fee:"),
+              TextField(
+                controller: _tuitionFeeController,
+                maxLength: 50,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  label: Text("Student Tuition Fee:"),
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: _submitStudentButton,
-                  child: const Text(
-                    "Add Student",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                )
-              ],
-            )
-          ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: _submitStudentButton,
+                    child: const Text(
+                      "Add Student",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
