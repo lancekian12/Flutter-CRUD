@@ -46,7 +46,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
       builder: (ctx) => AlertDialog(
         title: const Text('Invalid input'),
         content: const Text(
-            'Please make sure a valid Student Name, Age, Section, and Tuition Fee were entered'),
+            'Please make sure a valid Student Name, Age, Section, and Tuition Fee were entered. Make sure Student Name and Section is 8 characters'),
         actions: [
           TextButton(
             onPressed: () {
@@ -68,9 +68,9 @@ class _UpdateStudentState extends State<UpdateStudent> {
         _tuitionAmount <= 0;
 
     if (_studentNameController.text.trim().isEmpty ||
-        _studentNameController.text.length < 8 ||
+        _studentNameController.text.length <= 8 ||
         _sectionController.text.trim().isEmpty ||
-        _sectionController.text.length < 8 ||
+        _sectionController.text.length <= 8 ||
         enteredIsInvalid) {
       _showDialog();
       return;
