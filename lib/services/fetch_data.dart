@@ -35,26 +35,23 @@ Future<List<StudentModel>> fetchStudents() async {
 
   try {
     final response = await http.get(url);
+    print('Response body: ${response.body}'); // Print the raw response
+
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
+      print('Decoded response data: $responseData'); // Print the decoded data
 
       // Access the student data
       final studentList = responseData['data']['student'] as List<dynamic>;
 
-      // Convert to a list of StudentModel objects
       return studentList.map((student) {
-        return StudentModel(
-          firstName: student['firstName'] ?? 'Unknown',
-          lastName: student['lastName'] ?? 'Unknown',
-          course: student['course'] ?? 'Unknown',
-          year: student['year'] ?? 'Unknown',
-          enrolled: student['enrolled'] ?? false,
-        );
+        return StudentModel.fromJson(student);
       }).toList();
     } else {
       throw Exception('Failed to load students');
     }
   } catch (e) {
+    print('Error fetching students: $e');
     throw Exception('Error fetching students: $e');
   }
 }
@@ -90,7 +87,7 @@ Future<void> updateStudent(String studentId, StudentModel updatedData) async {
 }
 
 // Delete student data
-Future<void> deleteData(String studentId) async {
+Future<void> deleteStudent(String studentId) async {
   if (studentId.isEmpty) {
     throw Exception('Student ID cannot be empty');
   }

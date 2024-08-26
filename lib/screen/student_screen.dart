@@ -3,9 +3,11 @@ import 'package:crud_activity/model/student_model.dart';
 import 'package:crud_activity/services/fetch_data.dart';
 import 'package:crud_activity/widgets/card_widget.dart';
 import 'package:crud_activity/widgets/new_student.dart';
+import 'package:crud_activity/screen/student_details_screen.dart';
 
 class StudentScreen extends StatefulWidget {
   const StudentScreen({super.key});
+
   @override
   State<StudentScreen> createState() {
     return _StudentStateScreen();
@@ -26,6 +28,21 @@ class _StudentStateScreen extends State<StudentScreen> {
       MaterialPageRoute(
         builder: (context) => NewStudent(
           onAddStudent: (student) {
+            setState(() {
+              studentsFuture = fetchStudents();
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  void _navigateToStudentDetails(StudentModel student) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => StudentDetailsScreen(
+          student: student,
+          onStudentDeleted: () {
             setState(() {
               studentsFuture = fetchStudents();
             });
@@ -73,7 +90,10 @@ class _StudentStateScreen extends State<StudentScreen> {
             return ListView.builder(
               itemCount: students.length,
               itemBuilder: (context, index) {
-                return CardWidget(students[index]);
+                return CardWidget(
+                  student: students[index],
+                  onTap: () => _navigateToStudentDetails(students[index]),
+                );
               },
             );
           } else {
