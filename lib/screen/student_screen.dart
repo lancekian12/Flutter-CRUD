@@ -46,7 +46,8 @@ class _StudentStateScreen extends State<StudentScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: _navigateToNewStudent,
+            onPressed:
+                _navigateToNewStudent, // Correctly invoke navigation method
             icon: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,

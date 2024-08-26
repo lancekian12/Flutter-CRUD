@@ -77,10 +77,11 @@ class _NewStudentState extends State<NewStudent> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-      height: MediaQuery.of(context).size.height,
-      child: Padding(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('New Student'),
+      ),
+      body: Container(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
@@ -145,9 +146,9 @@ class _NewStudentState extends State<NewStudent> {
                       "Add Student",
                       style: TextStyle(fontSize: 16),
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
