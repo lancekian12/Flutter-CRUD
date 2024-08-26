@@ -30,37 +30,32 @@ Future<void> createStudent(StudentModel student) async {
   }
 }
 
-// Fetch student data
-Future<List<Map<String, dynamic>>> fetchData() async {
+Future<List<StudentModel>> fetchStudents() async {
   final url = Uri.parse('https://node-js-crud-5tc5.vercel.app/api/v1/student');
-  print('Fetching data from: $url');
+
   try {
     final response = await http.get(url);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
 
       // Access the student data
       final studentList = responseData['data']['student'] as List<dynamic>;
 
+      // Convert to a list of StudentModel objects
       return studentList.map((student) {
-        return {
-          '_id': student['_id'], // Ensure '_id' is included
-          'firstName': student['firstName'] ?? 'Unknown',
-          'lastName': student['lastName'] ?? 'Unknown',
-          'course': student['course'] ?? 'Unkown',
-          'year': student['year'] ?? 'Unknown',
-          'enrolled': student['enrolled'] ?? false,
-        };
+        return StudentModel(
+          firstName: student['firstName'] ?? 'Unknown',
+          lastName: student['lastName'] ?? 'Unknown',
+          course: student['course'] ?? 'Unknown',
+          year: student['year'] ?? 'Unknown',
+          enrolled: student['enrolled'] ?? false,
+        );
       }).toList();
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to load students');
     }
   } catch (e) {
-    print('Error: $e');
-    throw Exception('Error: $e');
+    throw Exception('Error fetching students: $e');
   }
 }
 

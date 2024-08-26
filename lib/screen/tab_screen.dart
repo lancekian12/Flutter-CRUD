@@ -1,3 +1,4 @@
+import 'package:crud_activity/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 
 class TabScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class _TabScreenState extends State<TabScreen> {
       appBar: AppBar(
         title: const Text("Student CRUD Activity"),
       ),
+      drawer: const MainDrawer(),
     );
   }
 }

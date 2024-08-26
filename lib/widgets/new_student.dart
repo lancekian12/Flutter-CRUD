@@ -13,18 +13,17 @@ class NewStudent extends StatefulWidget {
 }
 
 class _NewStudentState extends State<NewStudent> {
-  final _studentNameController = TextEditingController();
-  final _ageController = TextEditingController();
-  final _sectionController = TextEditingController();
-  final _tuitionFeeController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _courseController = TextEditingController();
+  String _selectedYear = '1'; // Default year
+  bool _isEnrolled = false;
 
   @override
   void dispose() {
-    _studentNameController.dispose();
-    _ageController.dispose();
-    _sectionController.dispose();
-    _tuitionFeeController.dispose();
-
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _courseController.dispose();
     super.dispose();
   }
 
@@ -34,7 +33,7 @@ class _NewStudentState extends State<NewStudent> {
       builder: (ctx) => AlertDialog(
         title: const Text('Invalid input'),
         content: const Text(
-            'Please make sure a valid Student Name, Age, Section, and Tuition Fee were entered. Make sure Student Name and Section is 8 characters'),
+            'Please make sure a valid First Name, Last Name, Course, and Year were entered.'),
         actions: [
           TextButton(
             onPressed: () {
@@ -48,27 +47,22 @@ class _NewStudentState extends State<NewStudent> {
   }
 
   void _submitStudentButton() async {
-    final _ageAmount = int.tryParse(_ageController.text);
-    final _tuitionAmount = int.tryParse(_tuitionFeeController.text);
-    final enteredIsInvalid = _ageAmount == null ||
-        _ageAmount <= 0 ||
-        _tuitionAmount == null ||
-        _tuitionAmount <= 0;
+    final enteredIsInvalid = _firstNameController.text.trim().isEmpty ||
+        _lastNameController.text.trim().isEmpty ||
+        _courseController.text.trim().isEmpty ||
+        _selectedYear.isEmpty;
 
-    if (_studentNameController.text.trim().isEmpty ||
-        _studentNameController.text.length <= 8 ||
-        _sectionController.text.trim().isEmpty ||
-        _sectionController.text.length <= 8 ||
-        enteredIsInvalid) {
+    if (enteredIsInvalid) {
       _showDialog();
       return;
     }
 
     final newStudent = StudentModel(
-      studentName: _studentNameController.text.trim(),
-      age: _ageAmount!,
-      section: _sectionController.text.trim(),
-      tuitionFee: _tuitionAmount!,
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+      course: _courseController.text.trim(),
+      year: _selectedYear,
+      enrolled: _isEnrolled,
     );
 
     try {
@@ -92,34 +86,55 @@ class _NewStudentState extends State<NewStudent> {
           child: Column(
             children: [
               TextField(
-                controller: _studentNameController,
+                controller: _firstNameController,
                 maxLength: 50,
                 decoration: const InputDecoration(
-                  label: Text("Student Name:"),
+                  label: Text("First Name:"),
                 ),
               ),
               TextField(
-                controller: _ageController,
+                controller: _lastNameController,
                 maxLength: 50,
-                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
-                  label: Text("Student Age:"),
+                  label: Text("Last Name:"),
                 ),
               ),
               TextField(
-                controller: _sectionController,
+                controller: _courseController,
                 maxLength: 50,
                 decoration: const InputDecoration(
-                  label: Text("Student Section:"),
+                  label: Text("Course:"),
                 ),
               ),
-              TextField(
-                controller: _tuitionFeeController,
-                maxLength: 50,
-                keyboardType: TextInputType.number,
+              DropdownButtonFormField<String>(
+                value: _selectedYear,
                 decoration: const InputDecoration(
-                  label: Text("Student Tuition Fee:"),
+                  labelText: 'Year',
                 ),
+                items: List.generate(5, (index) => (index + 1).toString())
+                    .map((year) => DropdownMenuItem(
+                          value: year,
+                          child: Text('Year $year'),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedYear = value!;
+                  });
+                },
+              ),
+              Row(
+                children: [
+                  const Text('Enrolled:'),
+                  Switch(
+                    value: _isEnrolled,
+                    onChanged: (value) {
+                      setState(() {
+                        _isEnrolled = value;
+                      });
+                    },
+                  ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

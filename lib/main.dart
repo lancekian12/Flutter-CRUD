@@ -1,3 +1,4 @@
+import 'package:crud_activity/screen/student_screen.dart';
 import 'package:crud_activity/screen/tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_activity/student.dart';
@@ -21,7 +22,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Student App',
       theme: theme,
-      home: const TabScreen(), // Use the Student screen
+      home: StudentScreen(),
     );
   }
 }
