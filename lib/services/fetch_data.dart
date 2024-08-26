@@ -12,10 +12,11 @@ Future<void> createStudent(StudentModel student) async {
       url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'firstName': student.studentName,
-        'age': student.age,
-        'section': student.section,
-        'tuitionFee': student.tuitionFee,
+        'firstName': student.firstName,
+        'lastName': student.lastName,
+        'course': student.course,
+        'year': student.year,
+        'enrolled': student.enrolled,
       }),
     );
 
@@ -33,7 +34,6 @@ Future<void> createStudent(StudentModel student) async {
 Future<List<Map<String, dynamic>>> fetchData() async {
   final url = Uri.parse('https://node-js-crud-5tc5.vercel.app/api/v1/student');
   print('Fetching data from: $url');
-
   try {
     final response = await http.get(url);
     print('Response status: ${response.statusCode}');
@@ -48,10 +48,11 @@ Future<List<Map<String, dynamic>>> fetchData() async {
       return studentList.map((student) {
         return {
           '_id': student['_id'], // Ensure '_id' is included
-          'studentName': student['studentName'] ?? 'Unknown',
-          'age': student['age'] ?? 0,
-          'section': student['section'] ?? 'Unknown',
-          'tuitionFee': student['tuitionFee'] ?? 0,
+          'firstName': student['firstName'] ?? 'Unknown',
+          'lastName': student['lastName'] ?? 'Unknown',
+          'course': student['course'] ?? 'Unkown',
+          'year': student['year'] ?? 'Unknown',
+          'enrolled': student['enrolled'] ?? false,
         };
       }).toList();
     } else {
@@ -74,10 +75,11 @@ Future<void> updateStudent(String studentId, StudentModel updatedData) async {
       url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'studentName': updatedData.studentName,
-        'age': updatedData.age,
-        'section': updatedData.section,
-        'tuitionFee': updatedData.tuitionFee,
+        'firstName': updatedData.firstName,
+        'lastName': updatedData.lastName,
+        'course': updatedData.course,
+        'year': updatedData.year,
+        'enrolled': updatedData.enrolled,
       }),
     );
 
