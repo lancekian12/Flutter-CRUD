@@ -64,7 +64,7 @@ class _StudentDetailsScreenState extends State<StudentDetailsScreen> {
   Future<void> _deleteStudent() async {
     try {
       await deleteStudent(_student.id);
-      widget.onStudentDeleted(); // Notify the parent screen
+      widget.onStudentDeleted();
       Navigator.of(context).pop();
     } catch (e) {
       print('Error deleting student: $e');
@@ -80,7 +80,7 @@ class _StudentDetailsScreenState extends State<StudentDetailsScreen> {
             setState(() {
               _student = updatedStudent;
             });
-            widget.onStudentUpdated(); // Notify parent screen of update
+            widget.onStudentUpdated();
           },
         ),
       ),

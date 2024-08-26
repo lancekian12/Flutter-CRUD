@@ -30,12 +30,12 @@ class _StudentStateScreen extends State<StudentScreen> {
           student: student,
           onStudentDeleted: () {
             setState(() {
-              studentsFuture = fetchStudents(); // Refresh student list
+              studentsFuture = fetchStudents();
             });
           },
           onStudentUpdated: () {
             setState(() {
-              studentsFuture = fetchStudents(); // Refresh student list
+              studentsFuture = fetchStudents();
             });
           },
         ),
@@ -49,7 +49,7 @@ class _StudentStateScreen extends State<StudentScreen> {
         builder: (context) => NewStudent(
           onAddStudent: (student) {
             setState(() {
-              studentsFuture = fetchStudents(); // Refresh student list
+              studentsFuture = fetchStudents();
             });
           },
         ),

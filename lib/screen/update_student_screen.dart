@@ -74,13 +74,13 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
       firstName: _firstNameController.text,
       lastName: _lastNameController.text,
       course: _courseController.text,
-      year: _selectedYear ?? 'First Year', // Fallback to 'First Year' if null
+      year: _selectedYear ?? 'First Year',
       enrolled: _isEnrolled,
     );
 
     try {
       await updateStudent(updatedStudent.id, updatedStudent);
-      widget.onUpdate(updatedStudent); // Trigger callback
+      widget.onUpdate(updatedStudent);
       Navigator.of(context).pop();
     } catch (e) {
       _showDialog('Failed to update student');
@@ -94,7 +94,10 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.colorScheme.primary,
-        title: const Text('Update Student'),
+        title: const Text(
+          'Update Student',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -103,7 +106,7 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
           children: [
             TextField(
               controller: _firstNameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'First Name',
                 border: OutlineInputBorder(),
               ),
@@ -111,7 +114,7 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
             const SizedBox(height: 16.0),
             TextField(
               controller: _lastNameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Last Name',
                 border: OutlineInputBorder(),
               ),
@@ -119,7 +122,7 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
             const SizedBox(height: 16.0),
             TextField(
               controller: _courseController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Course',
                 border: OutlineInputBorder(),
               ),
@@ -138,7 +141,7 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
                   child: Text(year),
                 );
               }).toList(),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Select Year',
                 border: OutlineInputBorder(),
               ),

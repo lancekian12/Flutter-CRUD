@@ -1,7 +1,5 @@
 import 'package:crud_activity/screen/student_screen.dart';
-import 'package:crud_activity/screen/tab_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:crud_activity/student.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final theme = ThemeData(
