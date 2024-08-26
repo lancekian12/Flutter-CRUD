@@ -3,8 +3,12 @@ import 'package:crud_activity/model/student_model.dart';
 import 'package:crud_activity/services/fetch_data.dart';
 
 class UpdateStudentScreen extends StatefulWidget {
-  const UpdateStudentScreen(
-      {required this.student, required this.onUpdate, super.key});
+  const UpdateStudentScreen({
+    required this.student,
+    required this.onUpdate,
+    super.key,
+  });
+
   final StudentModel student;
   final Function(StudentModel) onUpdate;
 
@@ -18,8 +22,15 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _courseController = TextEditingController();
-  String _selectedYear = 'First Year';
+  String? _selectedYear;
   bool _isEnrolled = false;
+
+  final List<String> _years = [
+    'First Year',
+    'Second Year',
+    'Third Year',
+    'Fourth Year',
+  ];
 
   @override
   void initState() {
@@ -63,13 +74,13 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
       firstName: _firstNameController.text,
       lastName: _lastNameController.text,
       course: _courseController.text,
-      year: _selectedYear,
+      year: _selectedYear ?? 'First Year', // Fallback to 'First Year' if null
       enrolled: _isEnrolled,
     );
 
     try {
       await updateStudent(updatedStudent.id, updatedStudent);
-      widget.onUpdate(updatedStudent);
+      widget.onUpdate(updatedStudent); // Trigger callback
       Navigator.of(context).pop();
     } catch (e) {
       _showDialog('Failed to update student');
@@ -78,9 +89,11 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: theme.colorScheme.primary,
         title: const Text('Update Student'),
       ),
       body: Padding(
@@ -90,39 +103,47 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
           children: [
             TextField(
               controller: _firstNameController,
-              decoration: const InputDecoration(labelText: 'First Name'),
-            ),
-            TextField(
-              controller: _lastNameController,
-              decoration: const InputDecoration(labelText: 'Last Name'),
-            ),
-            TextField(
-              controller: _courseController,
-              decoration: const InputDecoration(labelText: 'Course'),
+              decoration: InputDecoration(
+                labelText: 'First Name',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 16.0),
-            DropdownButton<String>(
-              value: _selectedYear,
+            TextField(
+              controller: _lastNameController,
+              decoration: InputDecoration(
+                labelText: 'Last Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _courseController,
+              decoration: InputDecoration(
+                labelText: 'Course',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            DropdownButtonFormField<String>(
+              value: _years.contains(_selectedYear) ? _selectedYear : null,
               onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    _selectedYear = value;
-                  });
-                }
+                setState(() {
+                  _selectedYear = value;
+                });
               },
-              items: <String>[
-                'First Year',
-                'Second Year',
-                'Third Year',
-                'Fourth Year',
-              ].map<DropdownMenuItem<String>>((String value) {
+              items: _years.map<DropdownMenuItem<String>>((String year) {
                 return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+                  value: year,
+                  child: Text(year),
                 );
               }).toList(),
-              hint: const Text('Select Year'),
+              decoration: InputDecoration(
+                labelText: 'Select Year',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 16.0),
             SwitchListTile(
               title: const Text('Enrolled'),
               value: _isEnrolled,
@@ -132,10 +153,20 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
                 });
               },
             ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: _submitUpdate,
-              child: const Text('Update Student'),
+            const SizedBox(height: 24.0),
+            Center(
+              child: ElevatedButton(
+                onPressed: _submitUpdate,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 12.0),
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                child: const Text('Update Student'),
+              ),
             ),
           ],
         ),

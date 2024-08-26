@@ -3,15 +3,17 @@ import 'package:crud_activity/model/student_model.dart';
 import 'package:crud_activity/services/fetch_data.dart';
 import 'package:crud_activity/screen/update_student_screen.dart';
 
-// Add a callback parameter to the StudentDetailsScreen
 class StudentDetailsScreen extends StatefulWidget {
-  const StudentDetailsScreen(
-      {required this.student,
-      required this.onStudentDeleted, // Add this parameter
-      super.key});
+  const StudentDetailsScreen({
+    required this.student,
+    required this.onStudentDeleted,
+    required this.onStudentUpdated,
+    super.key,
+  });
 
   final StudentModel student;
-  final VoidCallback onStudentDeleted; // Add this callback
+  final VoidCallback onStudentDeleted;
+  final VoidCallback onStudentUpdated;
 
   @override
   State<StudentDetailsScreen> createState() {
@@ -28,7 +30,38 @@ class _StudentDetailsScreenState extends State<StudentDetailsScreen> {
     _student = widget.student;
   }
 
-  void _deleteStudent() async {
+  Future<void> _confirmDeleteStudent() async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Deletion'),
+          content: const Text('Are you sure you want to delete this student?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldDelete == true) {
+      _deleteStudent();
+    }
+  }
+
+  Future<void> _deleteStudent() async {
     try {
       await deleteStudent(_student.id);
       widget.onStudentDeleted(); // Notify the parent screen
@@ -47,6 +80,7 @@ class _StudentDetailsScreenState extends State<StudentDetailsScreen> {
             setState(() {
               _student = updatedStudent;
             });
+            widget.onStudentUpdated(); // Notify parent screen of update
           },
         ),
       ),
@@ -77,16 +111,23 @@ class _StudentDetailsScreenState extends State<StudentDetailsScreen> {
             const SizedBox(height: 8.0),
             Text(
               'Course: ${_student.course}',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontSize: 24),
             ),
             Text(
               'Year: ${_student.year}',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontSize: 24),
             ),
             Text(
               'Enrolled: ${_student.enrolled ? "Yes" : "No"}',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: _student.enrolled ? Colors.green : Colors.red,
+                    fontSize: 24,
                   ),
             ),
             const SizedBox(height: 16.0),
@@ -98,12 +139,14 @@ class _StudentDetailsScreenState extends State<StudentDetailsScreen> {
                   child: const Text('Update'),
                 ),
                 ElevatedButton(
-                  onPressed: _deleteStudent,
+                  onPressed: _confirmDeleteStudent,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.red, // Set the background color to red
+                    backgroundColor: Colors.red,
                   ),
-                  child: const Text('Delete'),
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),

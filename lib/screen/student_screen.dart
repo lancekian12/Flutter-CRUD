@@ -23,20 +23,6 @@ class _StudentStateScreen extends State<StudentScreen> {
     studentsFuture = fetchStudents();
   }
 
-  void _navigateToNewStudent() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => NewStudent(
-          onAddStudent: (student) {
-            setState(() {
-              studentsFuture = fetchStudents();
-            });
-          },
-        ),
-      ),
-    );
-  }
-
   void _navigateToStudentDetails(StudentModel student) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -44,7 +30,26 @@ class _StudentStateScreen extends State<StudentScreen> {
           student: student,
           onStudentDeleted: () {
             setState(() {
-              studentsFuture = fetchStudents();
+              studentsFuture = fetchStudents(); // Refresh student list
+            });
+          },
+          onStudentUpdated: () {
+            setState(() {
+              studentsFuture = fetchStudents(); // Refresh student list
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  void _navigateToNewStudent() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NewStudent(
+          onAddStudent: (student) {
+            setState(() {
+              studentsFuture = fetchStudents(); // Refresh student list
             });
           },
         ),
