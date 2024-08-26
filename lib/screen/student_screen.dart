@@ -27,7 +27,7 @@ class _StudentStateScreen extends State<StudentScreen> {
         builder: (context) => NewStudent(
           onAddStudent: (student) {
             setState(() {
-              studentsFuture = fetchStudents(); // Refresh the student list
+              studentsFuture = fetchStudents();
             });
           },
         ),
@@ -46,8 +46,7 @@ class _StudentStateScreen extends State<StudentScreen> {
         ),
         actions: [
           IconButton(
-            onPressed:
-                _navigateToNewStudent, // Correctly invoke navigation method
+            onPressed: _navigateToNewStudent,
             icon: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,

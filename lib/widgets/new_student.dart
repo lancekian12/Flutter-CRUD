@@ -16,7 +16,7 @@ class _NewStudentState extends State<NewStudent> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _courseController = TextEditingController();
-  String _selectedYear = '1'; // Default year
+  String _selectedYear = 'First Year';
   bool _isEnrolled = false;
 
   @override
@@ -77,6 +77,12 @@ class _NewStudentState extends State<NewStudent> {
 
   @override
   Widget build(BuildContext context) {
+    final yearOptions = [
+      'First Year',
+      'Second Year',
+      'Third Year',
+      'Fourth Year',
+    ];
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Student'),
@@ -112,10 +118,10 @@ class _NewStudentState extends State<NewStudent> {
                 decoration: const InputDecoration(
                   labelText: 'Year',
                 ),
-                items: List.generate(5, (index) => (index + 1).toString())
-                    .map((year) => DropdownMenuItem(
+                items: yearOptions
+                    .map((year) => DropdownMenuItem<String>(
                           value: year,
-                          child: Text('Year $year'),
+                          child: Text(year),
                         ))
                     .toList(),
                 onChanged: (value) {
