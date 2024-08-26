@@ -5,14 +5,14 @@ import 'package:crud_activity/model/student_model.dart';
 // Create new student data
 Future<void> createStudent(StudentModel student) async {
   final url = Uri.parse('https://node-js-crud-5tc5.vercel.app/api/v1/student');
-  print('Creating student at: $url'); // Debugging line
+  print('Creating student at: $url');
 
   try {
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'studentName': student.studentName,
+        'firstName': student.studentName,
         'age': student.age,
         'section': student.section,
         'tuitionFee': student.tuitionFee,

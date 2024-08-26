@@ -1,13 +1,15 @@
 class StudentModel {
   StudentModel({
-    required this.studentName,
-    required this.age,
-    required this.section,
-    required this.tuitionFee,
+    required this.firstName,
+    required this.lastName,
+    required this.course,
+    required this.year,
+    required this.enrolled,
   });
 
-  final String studentName;
-  final int age;
-  final String section;
-  final int tuitionFee;
+  final String firstName;
+  final String lastName;
+  final String course;
+  final String year;
+  final bool enrolled;
 }
