@@ -44,16 +44,114 @@ class _StudentStateScreen extends State<StudentScreen> {
   }
 
   void _navigateToNewStudent() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => NewStudent(
-          onAddStudent: (student) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final _firstNameController = TextEditingController();
+        final _lastNameController = TextEditingController();
+        final _courseController = TextEditingController();
+        String _selectedYear = 'First Year';
+        bool _isEnrolled = false;
+
+        void _submitStudentButton() async {
+          final enteredIsInvalid = _firstNameController.text.trim().isEmpty ||
+              _lastNameController.text.trim().isEmpty ||
+              _courseController.text.trim().isEmpty ||
+              _selectedYear.isEmpty;
+
+          if (enteredIsInvalid) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Please fill in all the required fields.'),
+              ),
+            );
+            return;
+          }
+
+          final newStudent = StudentModel(
+            firstName: _firstNameController.text.trim(),
+            lastName: _lastNameController.text.trim(),
+            course: _courseController.text.trim(),
+            year: _selectedYear,
+            enrolled: _isEnrolled,
+          );
+
+          try {
+            await createStudent(newStudent);
+            // widget.onAddStudent(newStudent);
+            Navigator.of(context).pop();
             setState(() {
               studentsFuture = fetchStudents();
             });
-          },
-        ),
-      ),
+          } catch (e) {
+            print('Error adding student: $e');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Error adding student.'),
+              ),
+            );
+          }
+        }
+
+        return AlertDialog(
+          title: const Text('Add New Student'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  controller: _firstNameController,
+                  decoration: const InputDecoration(labelText: 'First Name'),
+                ),
+                TextField(
+                  controller: _lastNameController,
+                  decoration: const InputDecoration(labelText: 'Last Name'),
+                ),
+                TextField(
+                  controller: _courseController,
+                  decoration: const InputDecoration(labelText: 'Course'),
+                ),
+                DropdownButtonFormField<String>(
+                  value: _selectedYear,
+                  decoration: const InputDecoration(labelText: 'Year'),
+                  items:
+                      ['First Year', 'Second Year', 'Third Year', 'Fourth Year']
+                          .map((year) => DropdownMenuItem<String>(
+                                value: year,
+                                child: Text(year),
+                              ))
+                          .toList(),
+                  onChanged: (value) {
+                    _selectedYear = value!;
+                  },
+                ),
+                Row(
+                  children: [
+                    const Text('Enrolled:'),
+                    Switch(
+                      value: _isEnrolled,
+                      onChanged: (value) {
+                        _isEnrolled = value;
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close dialog without saving
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: _submitStudentButton,
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
     );
   }
 
