@@ -99,7 +99,8 @@ class _UpdateStudentScreenState extends State<UpdateStudentScreen> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
+        // Wrap the Column with SingleChildScrollView
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

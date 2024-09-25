@@ -2,7 +2,34 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:crud_activity/model/student_model.dart';
 
-// Create new student data
+//! Get Student
+
+Future<List<StudentModel>> fetchStudents() async {
+  final url = Uri.parse('https://node-js-crud-5tc5.vercel.app/api/v1/student');
+
+  try {
+    final response = await http.get(url);
+    print('Response body: ${response.body}');
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      print('Decoded response data: $responseData');
+
+      // Access the student data
+      final studentList = responseData['data']['student'] as List<dynamic>;
+
+      return studentList.map((student) {
+        return StudentModel.fromJson(student);
+      }).toList();
+    } else {
+      throw Exception('Failed to load students');
+    }
+  } catch (e) {
+    print('Error fetching students: $e');
+    throw Exception('Error fetching students: $e');
+  }
+}
+
+//! Create new student data
 Future<void> createStudent(StudentModel student) async {
   final url = Uri.parse('https://node-js-crud-5tc5.vercel.app/api/v1/student');
   print('Creating student at: $url');
@@ -30,33 +57,7 @@ Future<void> createStudent(StudentModel student) async {
   }
 }
 
-Future<List<StudentModel>> fetchStudents() async {
-  final url = Uri.parse('https://node-js-crud-5tc5.vercel.app/api/v1/student');
-
-  try {
-    final response = await http.get(url);
-    print('Response body: ${response.body}'); // Print the raw response
-
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-      print('Decoded response data: $responseData'); // Print the decoded data
-
-      // Access the student data
-      final studentList = responseData['data']['student'] as List<dynamic>;
-
-      return studentList.map((student) {
-        return StudentModel.fromJson(student);
-      }).toList();
-    } else {
-      throw Exception('Failed to load students');
-    }
-  } catch (e) {
-    print('Error fetching students: $e');
-    throw Exception('Error fetching students: $e');
-  }
-}
-
-// Update student data
+//! Update student data
 Future<void> updateStudent(String studentId, StudentModel updatedData) async {
   final url = Uri.parse(
       'https://node-js-crud-5tc5.vercel.app/api/v1/student/$studentId');
@@ -86,7 +87,7 @@ Future<void> updateStudent(String studentId, StudentModel updatedData) async {
   }
 }
 
-// Delete student data
+//! Delete student data
 Future<void> deleteStudent(String studentId) async {
   if (studentId.isEmpty) {
     throw Exception('Student ID cannot be empty');

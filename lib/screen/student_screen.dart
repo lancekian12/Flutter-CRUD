@@ -1,9 +1,9 @@
-import 'package:crud_activity/widgets/new_student.dart';
+import 'package:crud_activity/screen/student_details_screen.dart';
+import 'package:crud_activity/widgets/add_student_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_activity/model/student_model.dart';
 import 'package:crud_activity/services/fetch_data.dart';
 import 'package:crud_activity/widgets/card_widget.dart';
-import 'package:crud_activity/screen/student_details_screen.dart';
 
 class StudentScreen extends StatefulWidget {
   const StudentScreen({super.key});
@@ -43,18 +43,17 @@ class _StudentStateScreen extends State<StudentScreen> {
     );
   }
 
-  void _navigateToNewStudent() async {
-    final result = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const NewStudentScreen(),
-      ),
+  Future<void> _showAddStudentDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AddStudentDialog(onStudentAdded: () {
+          setState(() {
+            studentsFuture = fetchStudents();
+          });
+        });
+      },
     );
-
-    if (result == true) {
-      setState(() {
-        studentsFuture = fetchStudents();
-      });
-    }
   }
 
   @override
@@ -68,7 +67,7 @@ class _StudentStateScreen extends State<StudentScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: _navigateToNewStudent,
+            onPressed: _showAddStudentDialog,
             icon: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,

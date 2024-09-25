@@ -20,7 +20,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Student App',
       theme: theme,
-      home: StudentScreen(),
+      home: const StudentScreen(),
     );
   }
 }
